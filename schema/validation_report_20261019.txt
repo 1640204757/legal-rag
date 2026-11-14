@@ -1,0 +1,25 @@
+OpenLawGuide Schema 0.3.0 - full validation report
+Date: 2026-10-19
+Validator: jsonschema 4.26.0, Draft202012Validator + FormatChecker (date/date-time/uri enabled)
+Schemas: schema/legal_document.schema.json, schema/case_document.schema.json
+Examples: 7 (4 expected valid, 3 expected invalid)
+
+0.3.0 changes: authority roles remain file-nature only; citation_eligibility (4 checks + verdict) added;
+retrieved_at vs imported_at separated; capture_manifest_ref added.
+
+PASS schema/examples/legal_document.valid.json expected_valid=True errors=0
+PASS schema/examples/legal_document.invalid.json expected_valid=False errors=3
+    [] 'doc_id' is a required property
+    ['articles'] [] should be non-empty
+    ['doc_type'] 'STATUTE' is not one of ['CONSTITUTION', 'LAW', 'ADMINISTRATIVE_REGULATION', 'LOCAL_REGULATION', 'AUTONOMOUS_REGULATION', 'SPECIAL_ECONOMIC_ZONE_REGULATION', 'DEPARTMENT_RULE', 'LOCAL_GOVERNMENT_RULE', 'JUDICIAL_INTERPRETATION', 'JUDICIAL_INTERPRETATION_NATURE_DOC', 'OTHER_NORMATIVE_DOC', 'MILITARY_REGULATION', 'INTERNATIONAL_TREATY', 'UNKNOWN']
+PASS schema/examples/case_document.valid.json expected_valid=True errors=0
+PASS schema/examples/case_document.null_summary.valid.json expected_valid=True errors=0
+PASS schema/examples/case_document.omitted_summary.valid.json expected_valid=True errors=0
+PASS schema/examples/case_document.invalid.json expected_valid=False errors=5
+    [] 'court' is a required property
+    [] 'sections' is a required property
+    ['identities', 0] 'verification_status' is a required property
+    ['identities', 0] 'normative_effect' is a required property
+PASS schema/examples/case_document.invalid_unverified_effect.json expected_valid=False errors=1
+    ['identities', 0, 'normative_effect'] 'UNKNOWN' was expected
+ALL_OK

@@ -1,0 +1,32 @@
+{
+  "_note": "故意无效样例：缺少 court 与 sections；身份缺少 normative_effect/verification_status；judgment_date 不是合法日期。用于验证校验器会拒绝。",
+  "schema_version": "0.3.0",
+  "case_id": "CASE-DEMO-BAD",
+  "title": "示例无效案例",
+  "level": "SECOND_INSTANCE",
+  "procedure": "CIVIL",
+  "judgment_type": "JUDGMENT",
+  "judgment_date": "2025-13-45",
+  "cause_of_action_raw": "劳动争议",
+  "identities": [
+    {
+      "identity_type": "ORDINARY_JUDGMENT",
+      "source": "虚构来源",
+      "verified_at": "2026-10-19T00:00:00+08:00"
+    }
+  ],
+  "official_gists": [],
+  "model_summary": {
+    "text": "示例",
+    "model_version": "demo-model-v0",
+    "review_status": "UNREVIEWED"
+  },
+  "applicable_law_versions": [],
+  "related_cases": [],
+  "effective_status": "UNKNOWN",
+  "public_status": "UNKNOWN",
+  "collection_policy": "UNKNOWN",
+  "source_url": "https://example.invalid/case/bad",
+  "source_body": "虚构来源",
+  "retrieved_at": "2026-10-19T00:00:00+08:00"
+}

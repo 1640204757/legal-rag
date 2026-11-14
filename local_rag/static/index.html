@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>知法 · 本地法律智能助手</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <!-- 顶部状态栏：品牌标识、隐私安全说明、会话重置与移动端依据抽屉按钮 -->
+    <header>
+      <div class="brand-group">
+        <a class="brand" href="/">知法<span>OpenLawGuide</span></a>
+        <span class="brand-badge">本地智能法律助手</span>
+      </div>
+      <div class="header-actions">
+        <span class="privacy"><i class="pulse-dot"></i>本机离线推理 · 零上传隐私保障</span>
+        <button id="toggle-aside" class="quiet mobile-toggle-btn" title="查看法律依据">
+          📚 <span class="hide-mobile">依据与条文</span><span id="aside-badge" class="badge">0</span>
+        </button>
+        <button id="reset" class="quiet danger-hover" title="清空当前对话并开始新咨询">
+          <span>+</span> 重新开始
+        </button>
+      </div>
+    </header>
+
+    <!-- 主界面：左侧交互问答主区 + 右侧依据与条文侧边栏 -->
+    <main>
+      <section class="consultation">
+        <!-- 常驻使用边界：独立于会话引导卡，开始问答后仍可见；内容为静态文本节点。 -->
+        <p class="legal-disclaimer" role="note" aria-label="使用声明">
+          <strong>使用声明：</strong>本项目仅提供法律信息检索与整理，不构成法律意见；检索结果可能遗漏或不适用于个案；法规版本现行性未逐条在线复核；重要事项请咨询执业律师或官方机构。
+        </p>
+        <!-- 滚动对话流容器 -->
+        <div class="chat-viewport" id="chat-viewport">
+          <!-- 初始引导卡片：会话开始后自动折叠隐藏 -->
+          <div id="hero-intro" class="hero-intro">
+            <div class="hero-header">
+              <span class="eyebrow">把事情讲清楚，一起查依据</span>
+              <h1>遇到法律问题，<br />先理清案件事实与维权路径。</h1>
+              <p class="hero-desc">
+                详细描述发生了什么、你希望如何解决。本地助手将结合收录的 878 部规范及权威案例检索关键法条，梳理追问要点、处理流程与证据清单。
+              </p>
+            </div>
+
+            <!-- 数据收录范围说明 -->
+            <div class="scope-card">
+              <div class="scope-header">
+                <span class="scope-icon">🛡️</span>
+                <strong>本地资料库范围</strong>
+              </div>
+              <span id="coverage">已加载 878 部规范、6 个劳动案例摘要；支持国家库官方目录实时补充。</span>
+            </div>
+
+            <!-- 交互式多场景快捷引导 -->
+            <div class="scenarios-panel">
+              <div class="scenarios-title">常见问题快捷咨询（点击直接填入并开始分析）：</div>
+              <div id="examples" class="examples-grid">
+                <button type="button" class="scenario-btn" data-question="上班路上被非机动车撞伤，公司说不算工伤，我该准备什么材料证明和维权？">
+                  <span class="scenario-tag tag-work">劳动工伤</span>
+                  <strong>通勤事故工伤认定</strong>
+                  <p>上班途中车祸、公司拒配合认定该如何办？</p>
+                </button>
+                <button type="button" class="scenario-btn" data-question="公司没有给我交社保和工伤保险，在工作中受伤后的医疗费和待遇由谁承担？">
+                  <span class="scenario-tag tag-work">社保用工</span>
+                  <strong>未缴社保工伤待遇</strong>
+                  <p>无工伤保险时单位的法定义务与赔偿主体</p>
+                </button>
+                <button type="button" class="scenario-btn" data-question="离职时签了竞业限制协议，但公司一直不付竞业补偿金，我还需要遵守竞业限制吗？">
+                  <span class="scenario-tag tag-contract">劳动合同</span>
+                  <strong>竞业限制补偿纠纷</strong>
+                  <p>未支付补偿时的协议解除条件与法律后果</p>
+                </button>
+                <button type="button" class="scenario-btn" data-question="在超市买到了超过保质期的变质食品，去协商商家不理，能要求退一赔十或一千元吗？">
+                  <span class="scenario-tag tag-consumer">消费维权</span>
+                  <strong>食品过期退一赔十</strong>
+                  <p>食品安全惩罚性赔偿的法条依据与索赔步骤</p>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 消息列表区 -->
+          <div id="messages" class="messages" aria-live="polite"></div>
+        </div>
+
+        <!-- 悬浮吸底输入区 -->
+        <div class="input-dock">
+          <!-- 实时分析进度与状态条 -->
+          <div id="progress" class="progress-bar" role="status"></div>
+
+          <form id="compose" class="chat-form">
+            <div class="textarea-wrapper">
+              <textarea
+                id="question"
+                maxlength="2000"
+                rows="2"
+                placeholder="在此描述你的案情或追问细节（按 Enter 发送，Shift+Enter 换行）…"
+              ></textarea>
+            </div>
+            <div class="form-bottom">
+              <div class="form-hints">
+                <span id="count" class="char-count">不必填写姓名、身份证或真实单位名称</span>
+              </div>
+              <div class="form-buttons">
+                <button type="button" id="stop" class="stop-btn" hidden title="中止当前生成">
+                  <span class="stop-square">■</span> 停止分析
+                </button>
+                <button type="submit" id="send" class="send-btn" title="提交分析 (Enter)">
+                  <span>开始分析</span> <span class="arrow-icon">➔</span>
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <p class="footnote">
+            当前为本地试用版 · 相似资料与初步分析不能替代专业律师个案审查 · 会话保存在服务内存
+          </p>
+        </div>
+      </section>
+
+      <!-- 右侧：依据与条文侧边栏 -->
+      <aside id="reference-aside">
+        <div class="aside-header">
+          <div class="aside-title-group">
+            <h2>法律依据与检索候选</h2>
+            <p>回答所引用的法条原文及相关依据卡片</p>
+          </div>
+          <button id="close-aside" class="close-aside-btn mobile-only" title="收起依据面板">✕</button>
+        </div>
+
+        <!-- 折叠式系统诊断与模型状态（不占据核心条文阅读区） -->
+        <details id="system-details" class="system-accordion">
+          <summary class="system-summary">
+            <span class="summary-title">⚙️ 本地模型与向量库状态</span>
+            <span class="summary-status">正常</span>
+          </summary>
+          <div class="system-body">
+            <div class="sys-item"><span>问答模型</span><strong id="model">检查中</strong></div>
+            <div class="sys-item"><span>向量数据库</span><strong id="database-state">检查中</strong></div>
+            <div class="sys-item"><span>检索方式</span><strong id="index-state">检查中</strong></div>
+            <p id="system-note" class="sys-note"></p>
+            <button id="rebuild" class="quiet btn-block">加载新资料并入库</button>
+          </div>
+        </details>
+
+        <!-- 标签页切换：本次引用 vs 全部候选 -->
+        <div class="tabs-header">
+          <div class="tabs">
+            <button id="used-tab" class="tab-btn active">本次引用</button>
+            <button id="all-tab" class="tab-btn">检索候选</button>
+          </div>
+          <div class="sources-quick-actions">
+            <button id="toggle-expand" class="tiny-link" type="button">全部展开</button>
+          </div>
+        </div>
+
+        <!-- 快速过滤搜索栏 -->
+        <div class="source-filter-box">
+          <input
+            type="text"
+            id="source-filter"
+            class="filter-input"
+            placeholder="🔍 过滤法名或条号关键词…"
+          />
+        </div>
+
+        <!-- 来源条文卡片列表 -->
+        <div id="sources" class="sources-container">
+          <div class="empty">
+            <span class="document-icon">§</span>
+            <h3>先提问，再看依据</h3>
+            <p>法条保留原文和出处。案例将注明“发布稿摘要”，与裁判文书全文区分。</p>
+          </div>
+        </div>
+
+        <!-- 法律适用责任边界提示 -->
+        <div class="boundary">
+          <h3>📌 法律效力与核验说明</h3>
+          <p>
+            原文核验针对本地快照或国家库官方抓取；法条适用需满足具体构成要件，不等于个案必然裁判结论。
+          </p>
+        </div>
+      </aside>
+    </main>
+
+    <!-- 全局提示 Toast -->
+    <div id="toast" class="toast" hidden></div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

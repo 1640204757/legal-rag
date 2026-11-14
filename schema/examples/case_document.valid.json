@@ -1,0 +1,144 @@
+{
+  "_note": "虚构样例，仅用于 Schema 校验；当事人、案号、法院与要旨均为示意，不是真实案件。",
+  "schema_version": "0.3.0",
+  "case_id": "CASE-DEMO-001",
+  "case_number": "（2025）示例民终1号",
+  "official_library_id": "2025-XX-XXX-001（虚构）",
+  "title": "示例劳动争议案",
+  "court": "示例市中级人民法院",
+  "level": "SECOND_INSTANCE",
+  "procedure": "CIVIL",
+  "judgment_type": "JUDGMENT",
+  "judgment_date": "2025-06-01",
+  "publish_date": "2025-07-01",
+  "jurisdiction": "CN-DEMO",
+  "cause_of_action_raw": "劳动争议",
+  "cause_of_action_standard": "劳动争议",
+  "standard_version": "示例案由规定（虚构）",
+  "charge_raw": null,
+  "charge_standard": null,
+  "identities": [
+    {
+      "identity_type": "GUIDING_CASE",
+      "name": "指导案例第99号（虚构）",
+      "number": "指导案例第99号",
+      "grant_body": "示例最高人民法院",
+      "document": "示例通知（虚构）",
+      "date": "2024-01-01",
+      "source": "虚构来源A",
+      "verification_status": "VERIFIED",
+      "verified_at": "2026-10-19T00:00:00+08:00",
+      "normative_effect": "SHOULD_REFER"
+    },
+    {
+      "identity_type": "CASE_LIBRARY_REFERENCE",
+      "name": "人民法院案例库参考案例（虚构）",
+      "number": "2025-XX-XXX-001",
+      "grant_body": "示例最高人民法院",
+      "document": "示例入库通知（虚构）",
+      "date": "2025-07-01",
+      "source": "虚构来源B",
+      "verification_status": "VERIFIED",
+      "verified_at": "2026-10-19T00:00:00+08:00",
+      "normative_effect": "REFERENCE"
+    },
+    {
+      "identity_type": "ORDINARY_JUDGMENT",
+      "name": "普通裁判文书（未核验，虚构）",
+      "number": null,
+      "grant_body": null,
+      "document": null,
+      "date": null,
+      "source": "虚构来源C",
+      "verification_status": "UNKNOWN",
+      "verified_at": null,
+      "normative_effect": "UNKNOWN"
+    }
+  ],
+  "sections": [
+    {
+      "section_type": "CLAIM",
+      "text": "示例：原告主张未签订书面劳动合同。",
+      "locator": "p.1 ¶1",
+      "extract_method": "OFFICIAL_TEXT",
+      "model_version": null,
+      "review_status": "REVIEWED",
+      "subject_label": "PLAINTIFF"
+    },
+    {
+      "section_type": "DEFENSE",
+      "text": "示例：被告辩称已口头约定合同。",
+      "locator": "p.2 ¶1",
+      "extract_method": "OFFICIAL_TEXT",
+      "model_version": null,
+      "review_status": "REVIEWED",
+      "subject_label": "DEFENDANT"
+    },
+    {
+      "section_type": "COURT_FOUND_FACTS",
+      "text": "示例：法院认定未签订书面劳动合同。",
+      "locator": "p.4 ¶2",
+      "extract_method": "OFFICIAL_TEXT",
+      "model_version": null,
+      "review_status": "REVIEWED",
+      "subject_label": "COURT"
+    }
+  ],
+  "official_gists": [
+    {
+      "gist_type": "JUDICIAL_POINTS",
+      "text": "示例裁判要点：虚构。",
+      "source": "虚构来源A",
+      "locator": "要点1",
+      "verified_at": null
+    },
+    {
+      "gist_type": "JUDICIAL_GIST",
+      "text": "示例裁判要旨：虚构。",
+      "source": "虚构来源B",
+      "locator": "要旨1",
+      "verified_at": null
+    }
+  ],
+  "model_summary": {
+    "text": "示例模型总结：虚构。",
+    "model_version": "demo-model-v0",
+    "review_status": "UNREVIEWED",
+    "generated_at": "2026-10-19T00:00:00+08:00",
+    "note": "不得作为法院认为或官方要旨展示。"
+  },
+  "applicable_law_versions": [
+    {
+      "law_id": "LAW-DEMO-LABOR-001",
+      "version_id": "2025-09-01",
+      "article_no": "第一条",
+      "note": "虚构"
+    }
+  ],
+  "related_cases": [
+    {
+      "relation": "SAME_CASE_DIFFERENT_INSTANCE",
+      "case_id": "CASE-DEMO-002",
+      "note": "虚构关联"
+    }
+  ],
+  "effective_status": "EFFECTIVE",
+  "public_status": "PUBLIC",
+  "collection_policy": "COLLECT",
+  "source_url": "https://example.invalid/case/demo-001",
+  "source_body": "虚构来源B",
+  "retrieved_at": "2026-10-19T00:00:00+08:00",
+  "verified_at": null,
+  "content_hash": null,
+  "citation_card": {
+    "case_number": "（2025）示例民终1号",
+    "court": "示例市中级人民法院",
+    "level": "SECOND_INSTANCE",
+    "judgment_date": "2025-06-01",
+    "identity_summary": ["指导性案例", "案例库参考案例"],
+    "effective_status": "EFFECTIVE",
+    "source_url": "https://example.invalid/case/demo-001",
+    "locator": "p.4 ¶2",
+    "coverage_note": "示例：仅覆盖入库/已发布案例，不宣称全量。"
+  }
+}

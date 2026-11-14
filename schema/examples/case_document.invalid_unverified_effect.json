@@ -1,0 +1,55 @@
+{
+  "_note": "故意无效样例：身份 verification_status=UNKNOWN，却给出 SHOULD_REFER；用于验证“未核验身份不得展示为已确认效果”的约束。",
+  "schema_version": "0.3.0",
+  "case_id": "CASE-DEMO-BAD-EFFECT",
+  "case_number": null,
+  "official_library_id": null,
+  "title": "示例未核验身份错误效果",
+  "court": "示例基层人民法院",
+  "level": "FIRST_INSTANCE",
+  "procedure": "CIVIL",
+  "judgment_type": "JUDGMENT",
+  "judgment_date": "2025-03-03",
+  "publish_date": null,
+  "jurisdiction": "CN-DEMO",
+  "cause_of_action_raw": "示例案由",
+  "cause_of_action_standard": null,
+  "standard_version": null,
+  "charge_raw": null,
+  "charge_standard": null,
+  "identities": [
+    {
+      "identity_type": "GUIDING_CASE",
+      "name": "指导案例（未核验，虚构）",
+      "number": null,
+      "grant_body": null,
+      "document": null,
+      "date": null,
+      "source": "虚构来源",
+      "verification_status": "UNKNOWN",
+      "verified_at": null,
+      "normative_effect": "SHOULD_REFER"
+    }
+  ],
+  "sections": [
+    {
+      "section_type": "COURT_FOUND_FACTS",
+      "text": "示例：法院认定的事实（虚构）。",
+      "locator": "p.1 ¶1",
+      "extract_method": "OFFICIAL_TEXT",
+      "model_version": null,
+      "review_status": "REVIEWED",
+      "subject_label": "COURT"
+    }
+  ],
+  "official_gists": [],
+  "model_summary": null,
+  "applicable_law_versions": [],
+  "related_cases": [],
+  "effective_status": "UNKNOWN",
+  "public_status": "UNKNOWN",
+  "collection_policy": "UNKNOWN",
+  "source_url": "https://example.invalid/case/demo-bad-effect",
+  "source_body": "虚构来源",
+  "retrieved_at": "2026-10-19T00:00:00+08:00"
+}

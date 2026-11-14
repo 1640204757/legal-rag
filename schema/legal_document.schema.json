@@ -1,0 +1,288 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlawguide.local/schema/legal_document.v0.json",
+  "title": "OpenLawGuide LegalDocument v0",
+  "description": "法规/司法解释文档与条款结构的最小机器契约。v0 为草案，字段可能变化；示例均为虚构数据。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "doc_id",
+    "version_id",
+    "title",
+    "doc_type",
+    "issuing_body",
+    "jurisdiction",
+    "validity_status",
+    "repeal_date",
+    "authority_roles",
+    "official_url",
+    "retrieved_at",
+    "articles"
+  ],
+  "properties": {
+    "_note": {
+      "type": "string",
+      "description": "样例说明；真实数据可省略。"
+    },
+    "schema_version": {
+      "const": "0.3.0"
+    },
+    "doc_id": {
+      "type": "string",
+      "pattern": "^LAW-[A-Z0-9-]+$",
+      "description": "稳定资料 ID，跨版本不变。"
+    },
+    "version_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "版本 ID；同一资料的不同版本各自独立。"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "doc_type": {
+      "enum": [
+        "CONSTITUTION",
+        "LAW",
+        "ADMINISTRATIVE_REGULATION",
+        "LOCAL_REGULATION",
+        "AUTONOMOUS_REGULATION",
+        "SPECIAL_ECONOMIC_ZONE_REGULATION",
+        "DEPARTMENT_RULE",
+        "LOCAL_GOVERNMENT_RULE",
+        "JUDICIAL_INTERPRETATION",
+        "JUDICIAL_INTERPRETATION_NATURE_DOC",
+        "OTHER_NORMATIVE_DOC",
+        "MILITARY_REGULATION",
+        "INTERNATIONAL_TREATY",
+        "UNKNOWN"
+      ]
+    },
+    "issuing_body": {
+      "type": "string",
+      "minLength": 1,
+      "description": "制定机关。"
+    },
+    "promulgating_body": {
+      "type": ["string", "null"]
+    },
+    "document_number": {
+      "type": ["string", "null"],
+      "description": "文号或主席令/公告号；未知为 null。"
+    },
+    "field_tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "领域标签，可交叉；未知可为空数组。"
+    },
+    "jurisdiction": {
+      "type": "string",
+      "minLength": 1,
+      "description": "适用地域，如 CN / CN-BJ。"
+    },
+    "publish_date": {
+      "type": ["string", "null"],
+      "format": "date"
+    },
+    "effective_date": {
+      "type": ["string", "null"],
+      "format": "date"
+    },
+    "revision_date": {
+      "type": ["string", "null"],
+      "format": "date"
+    },
+    "repeal_date": {
+      "type": ["string", "null"],
+      "format": "date",
+      "description": "失效日期。字段必须出现；null 表示日期未知（不等于未废止）。validity_status=REPEALED 时也允许 null。"
+    },
+    "validity_status": {
+      "enum": [
+        "IN_FORCE",
+        "AMENDED",
+        "REPEALED",
+        "NOT_YET_EFFECTIVE",
+        "UNKNOWN"
+      ]
+    },
+    "validity_basis": {
+      "type": ["string", "null"],
+      "description": "效力状态的核验依据；未知为 null。"
+    },
+    "authority_level": {
+      "enum": [
+        "CONSTITUTION",
+        "LAW",
+        "ADMINISTRATIVE_REGULATION",
+        "LOCAL_REGULATION",
+        "RULE",
+        "JUDICIAL_INTERPRETATION",
+        "OTHER",
+        "UNKNOWN"
+      ]
+    },
+    "authority_roles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "ADJUDICATIVE_BASIS",
+          "REFERENCE",
+          "REASONING_REFERENCE",
+          "PROCEDURAL_GUIDE",
+          "UNKNOWN"
+        ]
+      },
+      "description": "依据资格：裁判依据/参照/说理参考/程序指引。可多值。仅表示文件性质上的资格，不等于本案可直接引用。"
+    },
+    "citation_eligibility": {
+      "description": "引用资格核验结果。null/缺省表示尚未核验；只有 verdict=ELIGIBLE 才可标“本案处置法定依据”。",
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["verified_verbatim", "version_confirmed", "authority_eligible", "facts_matched", "verdict"],
+          "properties": {
+            "verified_verbatim": { "type": "boolean", "description": "是否与官方原文逐字比对通过。" },
+            "version_confirmed": { "type": "boolean", "description": "是否确认案件适用该版本（含过渡规定）。" },
+            "authority_eligible": { "type": "boolean", "description": "依据资格是否成立（文件性质/制定权限/适用条件）。" },
+            "facts_matched": { "type": "boolean", "description": "事实要件与法定适用条件是否对应。" },
+            "verdict": {
+              "enum": ["ELIGIBLE", "NOT_ELIGIBLE", "UNVERIFIED"],
+              "description": "ELIGIBLE 需四项均为 true；任一未核验为 UNVERIFIED。"
+            },
+            "checked_at": { "type": ["string", "null"], "format": "date-time" },
+            "notes": { "type": ["string", "null"] }
+          }
+        }
+      ]
+    },
+    "legal_basis": {
+      "type": ["string", "null"],
+      "description": "制定/授权依据；如授权立法依据。"
+    },
+    "transition_rules": {
+      "type": ["string", "null"],
+      "description": "过渡规定、溯及力与例外说明；未知为 null。"
+    },
+    "version_relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["relation", "version_id"],
+        "properties": {
+          "relation": {
+            "enum": [
+              "AMENDS",
+              "AMENDED_BY",
+              "REPEALS",
+              "REPEALED_BY",
+              "SUPERSEDES",
+              "SUPERSEDED_BY",
+              "SAME_TOPIC"
+            ]
+          },
+          "version_id": { "type": "string" },
+          "note": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "official_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "retrieved_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "实际采集时间，来自采集记录，导入时不得覆盖。"
+    },
+    "imported_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "本次导入/重新解析时间；与 retrieved_at 分开，避免旧快照显得刚取得。"
+    },
+    "capture_manifest_ref": {
+      "type": ["string", "null"],
+      "description": "采集记录引用（如 data/raw/capture_manifest.json 中的条目）。"
+    },
+    "verified_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "content_hash": {
+      "type": ["string", "null"],
+      "description": "原文文件校验值；未知为 null。"
+    },
+    "reuse_basis": {
+      "type": ["string", "null"],
+      "description": "再利用依据；未知为 null。"
+    },
+    "articles": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/article" }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "citation_eligibility": { "type": "object" } },
+        "required": ["citation_eligibility"]
+      },
+      "then": {
+        "properties": {
+          "citation_eligibility": {
+            "allOf": [
+              {
+                "if": {
+                  "properties": { "verdict": { "const": "ELIGIBLE" } },
+                  "required": ["verdict"]
+                },
+                "then": {
+                  "properties": {
+                    "verified_verbatim": { "const": true },
+                    "version_confirmed": { "const": true },
+                    "authority_eligible": { "const": true },
+                    "facts_matched": { "const": true }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "article": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["article_id", "version_id", "level", "text", "locator"],
+      "properties": {
+        "article_id": { "type": "string", "minLength": 1 },
+        "version_id": { "type": "string", "minLength": 1 },
+        "parent_id": { "type": ["string", "null"] },
+        "level": {
+          "enum": ["PART", "CHAPTER", "SECTION", "ARTICLE", "PARAGRAPH", "ITEM", "SUBITEM"]
+        },
+        "article_no": { "type": ["string", "null"] },
+        "text": { "type": "string", "minLength": 1 },
+        "locator": {
+          "type": "string",
+          "description": "原文定位，如 行号/段落号/字符区间。"
+        },
+        "cross_refs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "effective_from": { "type": ["string", "null"], "format": "date" },
+        "effective_to": { "type": ["string", "null"], "format": "date" }
+      }
+    }
+  }
+}

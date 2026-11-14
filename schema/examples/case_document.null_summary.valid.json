@@ -1,0 +1,55 @@
+{
+  "_note": "虚构样例：验证 model_summary 可为 null（尚未生成模型摘要），不强迫填写模型版本。",
+  "schema_version": "0.3.0",
+  "case_id": "CASE-DEMO-NOSUM",
+  "case_number": null,
+  "official_library_id": null,
+  "title": "示例无模型摘要案例",
+  "court": "示例基层人民法院",
+  "level": "FIRST_INSTANCE",
+  "procedure": "CIVIL",
+  "judgment_type": "JUDGMENT",
+  "judgment_date": "2025-03-01",
+  "publish_date": null,
+  "jurisdiction": "CN-DEMO",
+  "cause_of_action_raw": "示例案由",
+  "cause_of_action_standard": null,
+  "standard_version": null,
+  "charge_raw": null,
+  "charge_standard": null,
+  "identities": [
+    {
+      "identity_type": "ORDINARY_JUDGMENT",
+      "name": "普通裁判文书（虚构）",
+      "number": null,
+      "grant_body": null,
+      "document": null,
+      "date": null,
+      "source": "虚构来源",
+      "verification_status": "VERIFIED",
+      "verified_at": "2026-10-19T00:00:00+08:00",
+      "normative_effect": "NO_FORMAL_EFFECT"
+    }
+  ],
+  "sections": [
+    {
+      "section_type": "COURT_FOUND_FACTS",
+      "text": "示例：法院认定的事实（虚构）。",
+      "locator": "p.1 ¶1",
+      "extract_method": "OFFICIAL_TEXT",
+      "model_version": null,
+      "review_status": "REVIEWED",
+      "subject_label": "COURT"
+    }
+  ],
+  "official_gists": [],
+  "model_summary": null,
+  "applicable_law_versions": [],
+  "related_cases": [],
+  "effective_status": "UNKNOWN",
+  "public_status": "UNKNOWN",
+  "collection_policy": "UNKNOWN",
+  "source_url": "https://example.invalid/case/demo-nosum",
+  "source_body": "虚构来源",
+  "retrieved_at": "2026-10-19T00:00:00+08:00"
+}

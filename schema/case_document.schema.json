@@ -1,0 +1,324 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openlawguide.local/schema/case_document.v0.json",
+  "title": "OpenLawGuide CaseDocument v0",
+  "description": "案例文档、身份、内容分区与引用卡片的最小机器契约。v0 为草案，字段可能变化；示例均为虚构数据。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "case_id",
+    "title",
+    "court",
+    "level",
+    "procedure",
+    "judgment_type",
+    "judgment_date",
+    "cause_of_action_raw",
+    "identities",
+    "sections",
+    "official_gists",
+    "applicable_law_versions",
+    "related_cases",
+    "effective_status",
+    "public_status",
+    "collection_policy",
+    "source_url",
+    "source_body",
+    "retrieved_at"
+  ],
+  "properties": {
+    "_note": {
+      "type": "string",
+      "description": "样例说明；真实数据可省略。"
+    },
+    "schema_version": { "const": "0.3.0" },
+    "case_id": { "type": "string", "minLength": 1 },
+    "case_number": {
+      "type": ["string", "null"],
+      "description": "案号；缺失允许为 null。"
+    },
+    "official_library_id": {
+      "type": ["string", "null"],
+      "description": "人民法院案例库入库编号；未知为 null。"
+    },
+    "title": { "type": "string", "minLength": 1 },
+    "court": {
+      "type": ["string", "null"],
+      "description": "审理法院。发布稿未标注时为 null，不得臆测。"
+    },
+    "level": {
+      "enum": ["FIRST_INSTANCE", "SECOND_INSTANCE", "RETRIAL", "OTHER", "UNKNOWN"]
+    },
+    "procedure": {
+      "enum": ["CIVIL", "CRIMINAL", "ADMINISTRATIVE", "LABOR", "OTHER", "UNKNOWN"]
+    },
+    "judgment_type": {
+      "enum": ["JUDGMENT", "RULING", "MEDIATION", "OTHER", "UNKNOWN"]
+    },
+    "judgment_date": {
+      "type": ["string", "null"],
+      "format": "date",
+      "description": "裁判日期。发布稿未标注时为 null。"
+    },
+    "publish_date": { "type": ["string", "null"], "format": "date" },
+    "jurisdiction": { "type": ["string", "null"] },
+    "cause_of_action_raw": {
+      "type": "string",
+      "minLength": 1,
+      "description": "案由/罪名的原始表达。"
+    },
+    "cause_of_action_standard": { "type": ["string", "null"] },
+    "standard_version": {
+      "type": ["string", "null"],
+      "description": "标准化所依据的版本，如民事案由规定/刑事罪名规定版本。"
+    },
+    "charge_raw": { "type": ["string", "null"] },
+    "charge_standard": { "type": ["string", "null"] },
+    "identities": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/identity" }
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/section" }
+    },
+    "official_gists": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/official_gist" }
+    },
+    "model_summary": {
+      "description": "可选。null 表示尚未生成模型摘要；存在时必须带模型版本与审校状态。",
+      "oneOf": [
+        { "type": "null" },
+        { "$ref": "#/$defs/model_summary" }
+      ]
+    },
+    "content_scope": {
+      "enum": ["FULL_TEXT", "RELEASE_SUMMARY_ONLY", "PARTIAL_TEXT", "UNKNOWN"],
+      "description": "内容范围。RELEASE_SUMMARY_ONLY 表示仅官方发布稿摘要，非判决书全文。"
+    },
+    "full_text_available": {
+      "type": "boolean",
+      "description": "是否取得判决书全文。false 时不得把发布稿摘要当全文展示。"
+    },
+    "content_scope_note": {
+      "type": ["string", "null"],
+      "description": "内容范围说明，例如发布稿包含哪些分区、缺哪些标识。"
+    },
+    "applicable_law_versions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/applicable_law_version" }
+    },
+    "related_cases": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/related_case" }
+    },
+    "effective_status": {
+      "enum": ["EFFECTIVE", "AMENDED_ON_APPEAL", "RETRIAL", "REVOKED", "UNKNOWN"]
+    },
+    "public_status": {
+      "enum": ["PUBLIC", "NOT_PUBLIC", "PARTIAL", "UNKNOWN"]
+    },
+    "collection_policy": {
+      "enum": ["COLLECT", "POLICY_EXCLUDED", "UNKNOWN"],
+      "description": "项目采集政策；POLICY_EXCLUDED 不等于法律禁令。"
+    },
+    "source_url": { "type": "string", "format": "uri" },
+    "source_body": { "type": "string", "minLength": 1 },
+    "retrieved_at": { "type": "string", "format": "date-time" },
+    "imported_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "本次导入时间；与 retrieved_at 分开。"
+    },
+    "verified_at": { "type": ["string", "null"], "format": "date-time" },
+    "content_hash": { "type": ["string", "null"] },
+    "citation_card": { "$ref": "#/$defs/citation_card" }
+  },
+  "$defs": {
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity_type", "source", "verification_status", "normative_effect"],
+      "properties": {
+        "identity_type": {
+          "enum": [
+            "GUIDING_CASE",
+            "CASE_LIBRARY_REFERENCE",
+            "GAZETTE",
+            "TYPICAL_CASE",
+            "LOCAL_REFERENCE_CASE",
+            "PROCURATORATE_CASE",
+            "ORDINARY_JUDGMENT",
+            "UNKNOWN"
+          ]
+        },
+        "name": { "type": ["string", "null"] },
+        "number": { "type": ["string", "null"] },
+        "grant_body": { "type": ["string", "null"] },
+        "document": { "type": ["string", "null"] },
+        "date": { "type": ["string", "null"], "format": "date" },
+        "source": { "type": "string", "minLength": 1 },
+        "verification_status": {
+          "enum": ["VERIFIED", "UNVERIFIED", "UNKNOWN"],
+          "description": "身份核验状态。非 VERIFIED 时不得展示为已确认身份。"
+        },
+        "verified_at": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "核验时间；null 表示未核验或时间未知。"
+        },
+        "normative_effect": {
+          "enum": ["SHOULD_REFER", "REFERENCE", "NO_FORMAL_EFFECT", "UNKNOWN"],
+          "description": "规范效果；未核验身份只能为 UNKNOWN，不得由模型自动授予。"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "verification_status": { "const": "VERIFIED" } },
+            "required": ["verification_status"]
+          },
+          "then": {
+            "required": ["verified_at"],
+            "properties": {
+              "verified_at": { "type": "string", "format": "date-time" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "verification_status": { "enum": ["UNVERIFIED", "UNKNOWN"] } },
+            "required": ["verification_status"]
+          },
+          "then": {
+            "properties": {
+              "normative_effect": { "const": "UNKNOWN" }
+            }
+          }
+        }
+      ]
+    },
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["section_type", "text", "locator", "extract_method", "review_status", "subject_label"],
+      "properties": {
+        "section_type": {
+          "enum": [
+            "CLAIM",
+            "DEFENSE",
+            "COURT_FOUND_FACTS",
+            "ISSUES",
+            "EVIDENCE",
+            "PROCEDURE",
+            "REASONING",
+            "APPLIED_LAW",
+            "RESULT",
+            "RELEASE_BASIC_FACTS",
+            "RELEASE_JUDGMENT_RESULT",
+            "RELEASE_TYPICAL_SIGNIFICANCE",
+            "UNCLASSIFIED"
+          ],
+          "description": "RELEASE_* 表示来自官方发布稿的摘要性分区，不是判决书原文分区。"
+        },
+        "text": { "type": ["string", "null"], "minLength": 1 },
+        "locator": { "type": ["string", "null"], "minLength": 1 },
+        "extract_method": {
+          "enum": ["OFFICIAL_TEXT", "HEURISTIC", "MODEL", "UNKNOWN"]
+        },
+        "model_version": { "type": ["string", "null"] },
+        "review_status": {
+          "enum": ["UNREVIEWED", "REVIEWED", "REJECTED"]
+        },
+        "subject_label": {
+          "enum": ["PLAINTIFF", "DEFENDANT", "THIRD_PARTY", "PROSECUTOR", "DEFENSE", "COURT", "UNKNOWN"]
+        },
+        "char_len": { "type": ["integer", "null"] },
+        "extraction_status": {
+          "enum": ["PARSED_FROM_RELEASE", "PARSED_FROM_FULLTEXT", "NOT_PROVIDED_IN_RELEASE"],
+          "description": "分区来源状态；NOT_PROVIDED_IN_RELEASE 表示发布稿未提供该分区。"
+        }
+      }
+    },
+    "official_gist": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gist_type", "text", "source", "locator"],
+      "properties": {
+        "gist_type": {
+          "enum": [
+            "JUDICIAL_POINTS",
+            "JUDICIAL_GIST",
+            "JUDICIAL_ABSTRACT",
+            "TYPICAL_SIGNIFICANCE"
+          ]
+        },
+        "text": { "type": "string", "minLength": 1 },
+        "source": { "type": "string", "minLength": 1 },
+        "locator": { "type": "string", "minLength": 1 },
+        "verified_at": { "type": ["string", "null"], "format": "date-time" }
+      }
+    },
+    "model_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "model_version", "review_status"],
+      "properties": {
+        "text": { "type": "string", "minLength": 1 },
+        "model_version": { "type": "string", "minLength": 1 },
+        "review_status": { "enum": ["UNREVIEWED", "REVIEWED", "REJECTED"] },
+        "generated_at": { "type": ["string", "null"], "format": "date-time" },
+        "note": { "type": ["string", "null"] }
+      }
+    },
+    "applicable_law_version": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["law_id", "version_id"],
+      "properties": {
+        "law_id": { "type": "string", "minLength": 1 },
+        "version_id": { "type": "string", "minLength": 1 },
+        "article_no": { "type": ["string", "null"] },
+        "note": { "type": ["string", "null"] }
+      }
+    },
+    "related_case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relation", "case_id"],
+      "properties": {
+        "relation": {
+          "enum": [
+            "SAME_CASE_DIFFERENT_INSTANCE",
+            "SERIES_CASE",
+            "APPEAL",
+            "RETRIAL",
+            "OTHER"
+          ]
+        },
+        "case_id": { "type": "string", "minLength": 1 },
+        "note": { "type": ["string", "null"] }
+      }
+    },
+    "citation_card": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity_summary", "effective_status", "source_url", "locator", "coverage_note"],
+      "properties": {
+        "case_number": { "type": ["string", "null"] },
+        "court": { "type": ["string", "null"] },
+        "level": { "type": "string" },
+        "judgment_date": { "type": ["string", "null"], "format": "date" },
+        "identity_summary": { "type": "array", "items": { "type": "string" } },
+        "effective_status": { "type": "string" },
+        "source_url": { "type": "string", "format": "uri" },
+        "locator": { "type": "string" },
+        "coverage_note": { "type": "string" }
+      }
+    }
+  }
+}

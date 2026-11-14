@@ -1,0 +1,15 @@
+{
+  "_note": "故意无效样例：缺少 doc_id，且 doc_type 使用了未定义值 STATUTE；用于验证校验器会拒绝。",
+  "schema_version": "0.3.0",
+  "version_id": "2025-09-01",
+  "title": "示例无效法规",
+  "doc_type": "STATUTE",
+  "issuing_body": "示例机关",
+  "jurisdiction": "CN",
+  "validity_status": "UNKNOWN",
+  "repeal_date": null,
+  "authority_roles": ["UNKNOWN"],
+  "official_url": "https://example.invalid/legal/invalid",
+  "retrieved_at": "2026-10-19T00:00:00+08:00",
+  "articles": []
+}

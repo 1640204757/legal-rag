@@ -1,0 +1,27 @@
+.local-deps/
+.deps/
+.venv/
+.local-python-path.txt
+__pycache__/
+.pytest_cache/
+data/local_index/
+data/ollama_models/
+data/models/
+data/runtime/
+# 会话冷归档（第 2 步）：本机用户原话与回答，不进 git。
+data/sessions/
+artifacts/
+.env
+*.log
+# IDE/AI助手的本机配置和临时目录，不属于项目本身。
+.idea/
+.junie/
+.tmp/
+.tmp_test/
+# 测试运行留下的只读临时目录，git 没有权限读取。
+tests-*-temp/
+.pytest-workspace-*/
+
+# 源码研究预览版：本机资料及生成数据包不随源码公开。
+/data/
+/cloud/package/
